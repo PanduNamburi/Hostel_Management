@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Update Complaint Status</h2>
+    <p><strong>Category:</strong> {{ complaint.category }}</p>
+    <p><strong>Description:</strong> {{ complaint.description }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="status">Update Status:</label>
+        <select name="status">
+            <option value="Pending" {% if complaint.status == "Pending" %}selected{% endif %}>Pending</option>
+            <option value="In Progress" {% if complaint.status == "In Progress" %}selected{% endif %}>In Progress</option>
+            <option value="Resolved" {% if complaint.status == "Resolved" %}selected{% endif %}>Resolved</option>
+        </select>
+        <button type="submit">Update</button>
+    </form>
+    <a href="{% url 'complaint_list' %}">Back to Complaints</a>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Complaint List</h2>
+    <a href="{% url 'submit_complaint' %}">Submit a New Complaint</a>
+    <table border="1">
+        <tr>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Status</th>
+            {% if user.is_staff %}
+                <th>Update Status</th>
+            {% endif %}
+        </tr>
+        {% for complaint in complaints %}
+        <tr>
+            <td>{{ complaint.category }}</td>
+            <td>{{ complaint.description }}</td>
+            <td>{{ complaint.get_status_display }}</td>
+            {% if user.is_staff %}
+                <td>
+                    <a href="{% url 'update_complaint_status' complaint.id %}">Update</a>
+                </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No complaints submitted yet.</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
