@@ -1,11 +1,110 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Submit a Complaint</h2>
-    <form method="post">
+    <h2 class="title">Submit a Complaint</h2>
+    <form method="post" class="complaint-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <button type="submit" class="submit-button">Submit</button>
     </form>
-    <a href="{% url 'complaint_list' %}">Back to Complaints</a>
+    <a href="{% url 'complaint_list' %}" class="back-link">Back to Complaints</a>
+
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .title {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .complaint-form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .complaint-form p {
+            margin-bottom: 15px; /* Space between form fields */
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effect */
+        }
+
+        .submit-button:hover {
+            background-color: #2980b9; /* Darker shade on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3498db;
+        }
+
+        .back-link:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector('.complaint-form');
+            
+            // Event listener for form submission
+            form.addEventListener('submit', function(event) {
+                // Optional confirmation before submission
+                const confirmation = confirm("Are you sure you want to submit this complaint?");
+                if (!confirmation) {
+                    event.preventDefault(); // Prevent form submission if user cancels
+                } else {
+                    // Optional additional logic before form submission
+                    console.log("Form submitted successfully.");
+                }
+            });
+
+            // Optional event listeners for input fields (if needed)
+            const inputs = form.querySelectorAll('input, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#3498db'; // Change border color on focus
+                });
+
+                input.addEventListener('blur', function() {
+                    this.style.borderColor = '#bdc3c7'; // Reset border color on blur
+                });
+                
+                // Optional validation or feedback can be added here
+                input.addEventListener('input', function() {
+                    if (this.value.length > 0) {
+                        this.classList.add('filled'); // Add class if input is filled
+                    } else {
+                        this.classList.remove('filled'); // Remove class if input is empty
+                    }
+                });
+            });
+        });
+    </script>
+
 {% endblock %}
