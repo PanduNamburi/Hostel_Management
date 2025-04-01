@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Complaint List</h2>
-    <a href="{% url 'submit_complaint' %}">Submit a New Complaint</a>
-    <table border="1">
+    <h2 class="title">Complaint List</h2>
+    <a class="submit-complaint" href="{% url 'submit_complaint' %}">Submit a New Complaint</a>
+    
+    <table class="complaint-table">
         <tr>
             <th>Category</th>
             <th>Description</th>
@@ -13,13 +14,13 @@
             {% endif %}
         </tr>
         {% for complaint in complaints %}
-        <tr>
+        <tr class="complaint-row">
             <td>{{ complaint.category }}</td>
             <td>{{ complaint.description }}</td>
             <td>{{ complaint.get_status_display }}</td>
             {% if user.is_staff %}
                 <td>
-                    <a href="{% url 'update_complaint_status' complaint.id %}">Update</a>
+                    <a class="update-link" href="{% url 'update_complaint_status' complaint.id %}">Update</a>
                 </td>
             {% endif %}
         </tr>
@@ -29,4 +30,70 @@
         </tr>
         {% endfor %}
     </table>
+
+    <style>
+        .title {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .submit-complaint {
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            background-color:darkslategray;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-complaint:hover {
+            background-color: darkgreen;
+        }
+
+        .complaint-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .complaint-table th, .complaint-table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .complaint-table th {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .complaint-row {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .complaint-row:hover {
+            transform: scale(1.02);
+            background-color: #ecf0f1;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const rows = document.querySelectorAll('.complaint-row');
+
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', () => {
+                    row.style.transition = 'transform 0.3s ease';
+                    row.style.transform = 'scale(1.02)';
+                });
+
+                row.addEventListener('mouseleave', () => {
+                    row.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+
 {% endblock %}
