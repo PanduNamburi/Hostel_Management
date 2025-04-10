@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="title">Submit a Complaint</h2>
+
+<div class="form-container">
+    <form method="post" class="complaint-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="submit-button">Submit Complaint</button>
+    </form>
+
+    <a href="{% url 'complaint_list' %}" class="back-link">← Back to Complaints</a>
+</div>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+        padding: 40px 20px;
+        margin: 0;
+    }
+
+    .title {
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 25px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .complaint-form p {
+        margin-bottom: 20px;
+    }
+
+    .complaint-form input,
+    .complaint-form select,
+    .complaint-form textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .complaint-form input:focus,
+    .complaint-form select:focus,
+    .complaint-form textarea:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 12px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background: #2980b9;
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        font-weight: 500;
+        color: #34495e;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .form-container {
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('.complaint-form');
+
+        form.addEventListener('submit', function (event) {
+            if (!confirm("Submit this complaint?")) {
+                event.preventDefault();
+            }
+        });
+
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function () {
+                this.style.boxShadow = "0 0 5px rgba(52,152,219,0.5)";
+            });
+            input.addEventListener('blur', function () {
+                this.style.boxShadow = "none";
+            });
+        });
+    });
+</script>
+{% endblock %}
