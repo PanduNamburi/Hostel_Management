@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-z5m2a0uzx@9#y&c#&%wds9r5vt@!kwc+wos^#t3s0r+ac6y1=#
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['hostel-management-iedm.onrender.com', 'localhost', '127.0.0.1']
 
 
 
