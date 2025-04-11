@@ -35,11 +35,9 @@
                     <td data-label="Category">{{ complaint.category }}</td>
                     <td data-label="Description">{{ complaint.description }}</td>
                     <td data-label="Status">{{ complaint.get_status_display }}</td>
-                    {% if user.is_staff %}
                     <td data-label="Update">
                         <a class="update-link" href="{% url 'update_complaint_status' complaint.id %}">Complaint Status</a>
                     </td>
-                    {% endif %}
                 </tr>
                 {% empty %}
                 <tr>
