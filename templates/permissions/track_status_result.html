@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Status Result{% endblock %}
+
+{% block content %}
+<div class="status-container">
+    <h1 class="status-title">📋 Outing Status for: <span class="highlight">"{{ student_name }}"</span></h1>
+
+    <div class="status-card">
+        {% if permissions %}
+            <ul class="status-list">
+                {% for p in permissions %}
+                    <li class="status-entry">
+                        <p><strong>📅 Outing Date:</strong> {{ p.outing_time }}</p>
+                        <p><strong>📝 Reason:</strong> {{ p.outing_reason }}</p>
+                        <p><strong>📌 Status:</strong>
+                            {% if p.approved %}
+                                <span class="status-approved">✅ Approved</span>
+                            {% else %}
+                                <span class="status-pending">⏳ Pending</span>
+                            {% endif %}
+                        </p>
+                        {% if p.return_time %}
+                            <p><strong>🔙 Returned At:</strong> {{ p.return_time }}</p>
+                        {% endif %}
+                        <hr>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-records">⚠️ No outing requests found for that name.</p>
+        {% endif %}
+
+        <a href="{% url 'track_status' %}" class="back-button">← Track Another</a>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #e0f2fe, #f0f9ff);
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .status-container {
+        max-width: 850px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .status-title {
+        text-align: center;
+        color: #1f2937;
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .highlight {
+        color: #2563eb;
+        font-weight: 600;
+    }
+
+    .status-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        color:black;
+    }
+
+    .status-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .status-entry {
+        font-size: 16px;
+        margin-bottom: 25px;
+        line-height: 1.7;
+        animation: fadeInUp 0.3s ease-in-out;
+    }
+
+    .status-approved {
+        color: green;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        color: #e67e22;
+        font-weight: 600;
+    }
+
+    .no-records {
+        font-size: 16px;
+        color: #555;
+        text-align: center;
+    }
+
+    .back-button {
+        display: block;
+        margin: 30px auto 0;
+        background-color: #3498db;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.3s ease, transform 0.2s;
+        width: fit-content;
+    }
+
+    .back-button:hover {
+        background-color: #2c80b4;
+        transform: translateY(-1px);
+    }
+
+    hr {
+        margin: 20px 0;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .status-title {
+            font-size: 22px;
+        }
+
+        .status-card {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Outing Request{% endblock %}
+
+{% block content %}
+<div class="outing-wrapper">
+    <h2 class="outing-title">🚶‍♂️ Submit Outing Request</h2>
+
+    <div class="outing-form-container">
+        <form method="post" class="outing-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_student_name">Student Name</label>
+                <input type="text" name="student_name" id="id_student_name" value="{{ form.student_name.value|default:'' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_parent_email">Parent Email</label>
+                <input type="email" name="parent_email" id="id_parent_email" value="{{ form.parent_email.value|default:'' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_outing_reason">Outing Reason</label>
+                <textarea name="outing_reason" id="id_outing_reason" rows="4">{{ form.outing_reason.value|default:'' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="id_outing_time">Outing Time</label>
+                <input type="datetime-local" name="outing_time" id="id_outing_time" value="{{ form.outing_time.value|date:'Y-m-d\\TH:i' }}" required>
+            </div>
+
+            <button type="submit" class="submit-btn">🚀 Submit</button>
+            <a href="{% url 'complaint_list' %}" class="back-btn">← Back to Complaints</a>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', 'Segoe UI', sans-serif;
+        background: linear-gradient(to right, #dff1ff, #f9fafe);
+    }
+
+    .outing-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 15px;
+    }
+
+    .outing-title {
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .outing-form-container {
+        background-color: #ffffff;
+        max-width: 550px;
+        width: 100%;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background: #3498db;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .submit-btn:hover {
+        background: #2980b9;
+        transform: translateY(-1px);
+    }
+
+    .back-btn {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        color: #2c3e50;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .back-btn:hover {
+        color: #3498db;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .outing-form-container {
+            padding: 20px;
+        }
+
+        .outing-title {
+            font-size: 1.5rem;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('.outing-form');
+
+        form.addEventListener('submit', function (event) {
+            if (!confirm("Are you sure you want to submit this outing request?")) {
+                event.preventDefault();
+            }
+        });
+
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function () {
+                this.style.boxShadow = "0 0 6px rgba(52,152,219,0.4)";
+            });
+            input.addEventListener('blur', function () {
+                this.style.boxShadow = "none";
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Page layout with sidebar and content -->
+<div class="container-fluid d-flex p-0 m-0">
+    <!-- Sidebar (Dashboard) -->
+    <div class="tools-bar col-md-3 col-sm-12 p-3">
+        <h3 class="dashboard-title">Dashboard</h3>
+        <a class="btn submit-complaint w-100" href="{% url 'submit_complaint' %}">➕ Submit New Complaint</a>
+        <a class="btn submit-complaint w-100" href="{% url 'request_permission' %}">➕ Outing Request</a>
+        <a class="btn submit-complaint w-100" href="{% url 'track_status' %}">➕ Track Status</a>
+        <input type="text" id="searchBar" placeholder="Search complaints..." class="search-input w-100">
+        <select id="statusFilter" class="status-filter w-100">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+        </select>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 col-sm-12 p-4">
+        <h2 class="title">{{ user.username }}, Here is your Complaints.</h2>
+        <div class="card">
+            <div class="table-container">
+                <table class="complaint-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            {% if user.is_staff %}
+                                <th>Update</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody id="complaintTable">
+                        {% for complaint in complaints %}
+                        <tr class="complaint-row">
+                            <td data-label="Category">{{ complaint.category }}</td>
+                            <td data-label="Description">{{ complaint.description }}</td>
+                            <td data-label="Status">{{ complaint.get_status_display }}</td>
+                            {% if user.is_staff %}
+                            <td data-label="Update">
+                                <a class="update-link" href="{% url 'update_complaint_status' complaint.id %}">Complaint Status</a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center;">No complaints submitted yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styling -->
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #dbeafe;
+        margin: 0;
+        padding: 0;
+        animation: fadeInPage 0.6s ease;
+    }
+
+    @keyframes fadeInPage {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 24px;
+        color: #2c3e50;
+    }
+
+    .tools-bar {
+        background-color: #3498db;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .tools-bar .btn {
+        background-color: #2c80b4;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .tools-bar .btn:hover {
+        background-color: #1c6799;
+    }
+
+    .search-input, .status-filter {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+    }
+
+    .card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .complaint-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .complaint-table th,
+    .complaint-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .complaint-table th {
+        background-color: #2c3e50;
+        color: #fff;
+    }
+
+    .complaint-row {
+        opacity: 0;
+        animation: slideIn 0.4s ease forwards;
+        color: black;
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .complaint-row:hover {
+        background-color: #f2f8ff;
+    }
+
+    .update-link {
+        color: #16a085;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .update-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .tools-bar {
+            width: 100%;
+            height: auto;
+        }
+
+        .complaint-table, .complaint-table thead, .complaint-table tbody, .complaint-table tr, .complaint-table th, .complaint-table td {
+            display: block;
+        }
+
+        .complaint-table thead {
+            display: none;
+        }
+
+        .complaint-table tr {
+            margin-bottom: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 10px;
+        }
+
+        .complaint-table td {
+            padding: 10px;
+            position: relative;
+            text-align: left;
+        }
+
+        .complaint-table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #999;
+            display: block;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+
+<!-- Script for filters -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const statusFilter = document.getElementById('statusFilter');
+        const searchBar = document.getElementById('searchBar');
+        const tableRows = document.querySelectorAll('#complaintTable tr');
+
+        // Animate complaint rows
+        tableRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = 1;
+            }, index * 100);
+        });
+
+        // Filter function
+        function applyFilters() {
+            const status = statusFilter.value.toLowerCase();
+            const search = searchBar.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const statusText = row.querySelector('td[data-label="Status"]')?.innerText.toLowerCase();
+                const rowText = row.innerText.toLowerCase();
+                const matchStatus = !status || statusText.includes(status);
+                const matchSearch = !search || rowText.includes(search);
+                row.style.display = (matchStatus && matchSearch) ? '' : 'none';
+            });
+        }
+
+        statusFilter.addEventListener('change', applyFilters);
+        searchBar.addEventListener('input', applyFilters);
+    });
+</script>
+
+{% endblock %}

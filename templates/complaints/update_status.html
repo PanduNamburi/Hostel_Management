@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 style="text-align: center; color: #2c3e50; margin: 40px 0 20px; font-size: 28px;">
+    Complaint Status Details
+</h1>
+
+<div style="max-width: 600px; background: whitesmoke; margin: 0 auto; padding: 30px 25px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); color:black;">
+    <p style="font-size: 16px; margin: 12px 0;"><strong>Category:</strong> {{ complaint.category }}</p>
+    <p style="font-size: 16px; margin: 12px 0;"><strong>Description:</strong> {{ complaint.description }}</p>
+    <p style="font-size: 16px; margin: 12px 0;"><strong>Current Status:</strong> {{ complaint.get_status_display }}</p>
+
+    {% if complaint.image %}
+        <div style="margin-top: 15px; text-align: center;">
+            <img src="{{ complaint.image.url }}" alt="Complaint Image"
+                style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s;" />
+        </div>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <p style="font-size: 16px; color: #2c3e50; font-weight: 600; margin-top: 25px;">
+            <strong>Estimated Days to Resolve:</strong> {{ complaint.estimated_days }} day{{ complaint.estimated_days|pluralize }}
+        </p>
+    {% elif complaint.estimated_days %}
+        <p style="font-size: 16px; color: #2980b9; font-weight: 500; margin-top: 15px;">
+            <strong>Estimated Days to Resolve:</strong> {{ complaint.estimated_days }} day{{ complaint.estimated_days|pluralize }}
+        </p>
+    {% endif %}
+
+    <!-- Back Button -->
+    <a href="{% url 'complaint_list' %}" style="display: block; margin-top: 30px; text-align: center; background-color: #3498db; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+        ← Back to Complaints
+    </a>
+</div>
+
+<!-- Light blue background applied to full page -->
+<style>
+    body {
+        background: #dbeafe;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    img:hover {
+        transform: scale(1.03);
+    }
+
+    a:hover {
+        background-color: #2c80b4;
+    }
+
+    @media (max-width: 600px) {
+        .complaint-wrapper {
+            padding: 15px;
+        }
+
+        .title {
+            font-size: 22px;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+    }
+</style>
+
+{% endblock %}

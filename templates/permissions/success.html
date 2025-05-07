@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Submitted{% endblock %}
+
+{% block content %}
+<div class="success-wrapper">
+    <div class="success-box">
+        <h2 class="success-title">🎉 Outing Request Submitted!</h2>
+        <p class="success-message">
+            Your outing request has been recorded successfully.<br>
+            Please wait for admin approval.
+        </p>
+
+        <div class="details-card">
+            <h3 class="details-header">📋 Submitted Details</h3>
+            <ul class="details-list">
+                <li><strong>👤 Student Name:</strong> {{ permission.student_name }}</li>
+                <li><strong>📧 Parent Email:</strong> {{ permission.parent_email }}</li>
+                <li><strong>📝 Outing Reason:</strong> {{ permission.outing_reason }}</li>
+                <li><strong>⏰ Outing Time:</strong> {{ permission.outing_time }}</li>
+                <li><strong>📅 Request Submitted At:</strong> {{ permission.requested_at }}</li>
+                <li><strong>📌 Status:</strong>
+                    {% if permission.approved %}
+                        <span class="status-approved">✅ Approved</span>
+                    {% else %}
+                        <span class="status-pending">⏳ Pending Approval</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+
+        <a href="{% url 'request_permission' %}" class="submit-another-btn">➕ Submit Another Request</a>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #ecf0f1, #e6f7ff);
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .success-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 15px;
+    }
+
+    .success-box {
+        max-width: 700px;
+        width: 100%;
+        background: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .success-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .success-message {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 35px;
+        line-height: 1.6;
+    }
+
+    .details-card {
+        background: #f9fcff;
+        padding: 25px;
+        border-radius: 12px;
+        text-align: left;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .details-header {
+        color: #3498db;
+        font-size: 1.25rem;
+        margin-bottom: 20px;
+    }
+
+    .details-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .details-list li {
+        margin-bottom: 12px;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .status-approved {
+        color: green;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        color: #e67e22;
+        font-weight: 600;
+    }
+
+    .submit-another-btn {
+        display: inline-block;
+        margin-top: 30px;
+        background-color: #3498db;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .submit-another-btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .success-box {
+            padding: 25px 20px;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+        }
+
+        .details-header {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+{% endblock %}
